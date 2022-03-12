@@ -1,29 +1,33 @@
 <template>
   <div class="contents">
     <div class="form-wrapper form-wrapper-sm">
-      <form @submit.prevent="sumbitForm" class="form">
+      <form @submit.prevent="submitForm" class="form">
+        <p>b@b.com</p>
         <div>
-          <p>b@b.com</p>
-          <label for="username">Id:</label>
-          <input
-            type="text"
-            id="username"
-            v-model="username"
-            placeholder="email"
-          />
+          <label for="username">id:</label>
+          <input id="username" type="text" v-model="username" />
+          <p class="validation-text">
+            <span class="warning" v-if="!isUsernameValid && username">
+              Please enter an email address
+            </span>
+          </p>
         </div>
         <div>
-          <label for="password">Pw:</label>
-          <input type="text" id="password" v-model="password" />
+          <label for="password">pw:</label>
+          <input id="password" type="text" v-model="password" />
         </div>
-        <button :disabled="!isUsernameValid || !password" type="submit">
+        <button
+          :disabled="!isUsernameValid || !password"
+          type="submit"
+          class="btn"
+        >
           로그인
         </button>
-        <div>{{ logMessage }}</div>
-        <a :href="linkinfo" class="link" target="_blank">
-          자바스크립트 email validation 정규표현식코드
-        </a>
       </form>
+      <p class="log">{{ logMessage }}</p>
+      <a :href="linkinfo" class="link" target="_blank">
+        자바스크립트 email validation 정규표현식코드
+      </a>
     </div>
   </div>
 </template>
@@ -47,14 +51,14 @@ export default {
     },
   },
   methods: {
-    async sumbitForm() {
+    async submitForm() {
       try {
         const userData = {
           username: this.username,
           password: this.password,
         };
         await this.$store.dispatch('LOGIN', userData);
-        // store에 action으로 옮김
+        // store에 action으로 옮김==
         // const { data } = await loginUser(userData);
         // console.log(data.token);
         // this.$store.commit('setToken', data.token);
@@ -62,7 +66,7 @@ export default {
         // saveAuthToCookie(data.token);
         // saveUserToCookie(data.user.nickname);
         // this.logMessage = alert(`${data.user.nickname}님 환영합니다`);
-        // store에 action으로 옮김
+        // store에 action으로 옮김==
 
         this.$router.push('/main');
         //this.initForm();
@@ -70,7 +74,6 @@ export default {
         console.log(error.response);
         //console.log(error.response.data);
         this.logMessage = error.response.data;
-        //this.initForm();
       } finally {
         this.initForm();
       }

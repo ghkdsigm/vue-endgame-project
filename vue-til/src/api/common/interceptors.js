@@ -7,6 +7,7 @@ export function setInterceptors(instance) {
       // Do something before request is sent
       //console.log(config);
       config.headers.Authorization = store.state.token; //인터셉터에 토큰 담아주는법
+      console.log(store.state.token);
       return config;
     },
     function(error) {

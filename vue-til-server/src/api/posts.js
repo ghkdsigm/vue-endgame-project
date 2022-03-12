@@ -16,9 +16,13 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.code === 11000) {
-      return res.status(400).send({ message: 'Duplicated Data', error });
+      return res
+        .status(400)
+        .send({ message: '동일한 게시물 제목이 존재합니다.', error });
     }
-    res.status(400).send({ message: 'sth wrong', error });
+    res
+      .status(400)
+      .send({ message: '게시글을 작성하신후 다시 등록해주세요', error });
   }
 });
 

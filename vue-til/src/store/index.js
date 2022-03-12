@@ -3,16 +3,19 @@ import Vuex from 'vuex';
 import {
   getAuthFromCookie,
   getUserFromCookie,
+  getNickFromCookie,
   saveAuthToCookie,
   saveUserToCookie,
+  saveNickToCookie,
 } from '@/utils/cookies';
-import { loginUser } from '@/api/index';
+import { loginUser } from '@/api/auth';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     username: getUserFromCookie() || '',
+    nickname: getNickFromCookie() || '',
     token: getAuthFromCookie() || '',
   },
   getters: {
@@ -24,6 +27,9 @@ export default new Vuex.Store({
     setUsername(state, username) {
       state.username = username;
     },
+    setNickname(state, nickname) {
+      state.nickname = nickname;
+    },
     clearUsername(state) {
       state.username = '';
     },
@@ -31,14 +37,16 @@ export default new Vuex.Store({
       state.token = token;
     },
   },
-  action: {
+  actions: {
     async LOGIN({ commit }, userData) {
       const { data } = await loginUser(userData);
       console.log(data.token);
       commit('setToken', data.token);
-      commit('setUsername', data.user.nickname);
+      commit('setUsername', data.user.username);
+      commit('setNickname', data.user.nickname);
       saveAuthToCookie(data.token);
-      saveUserToCookie(data.user.nickname);
+      saveUserToCookie(data.user.username);
+      saveNickToCookie(data.user.nickname);
       this.logMessage = alert(`${data.user.nickname}님 환영합니다`);
       return data;
     },

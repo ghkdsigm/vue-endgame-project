@@ -3,7 +3,7 @@
     <div>
       <router-link to="/" class="logo">
         TIL
-        <span v-if="isUserLogin">by {{ $store.state.username }}</span>
+        <span v-if="isUserLogin">by {{ $store.state.nickname }}</span>
       </router-link>
     </div>
     <div class="navigations">
