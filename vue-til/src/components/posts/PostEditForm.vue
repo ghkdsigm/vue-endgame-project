@@ -1,6 +1,6 @@
 <template>
   <div class="contents">
-    <h1 class="page-header">생성페이지</h1>
+    <h1 class="page-header">수정페이지</h1>
     <div class="form-wrapper">
       <form class="form" @submit.prevent="submitForm">
         <div>
@@ -14,7 +14,7 @@
             문자는 200자 이하로 작성해주세요
           </p>
         </div>
-        <button type="submit" class="btn">등록하기</button>
+        <button type="submit" class="btn">수정하기</button>
         <button
           type="button"
           class="btn"
@@ -32,8 +32,7 @@
 </template>
 
 <script>
-import { createPosts } from '@/api/posts';
-
+import { fetchPost, editPost } from '@/api/posts';
 export default {
   data() {
     return {
@@ -49,16 +48,17 @@ export default {
   },
   methods: {
     async submitForm() {
+      const id = this.$route.params.id;
       try {
-        const response = await createPosts({
+        await editPost(id, {
           title: this.title,
           contents: this.contents,
         });
-        console.log(response);
-        alert('등록되었습니다.');
+        alert('수정되었습니다.');
         this.$router.push('/main');
       } catch (error) {
-        this.logMessage = error.response.data.message;
+        console.log(error);
+        this.logMessage = error;
       } finally {
         this.initFunc();
       }
@@ -71,10 +71,17 @@ export default {
       this.contents = '';
     },
   },
+  async created() {
+    const id = this.$route.params.id;
+    const { data } = await fetchPost(id);
+    this.title = data.title;
+    this.contents = data.contents;
+    console.log(data);
+  },
 };
 </script>
 
-<style scoped>
+<style>
 .form-wrapper .form {
   width: 100%;
 }
